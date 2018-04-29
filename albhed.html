@@ -1,0 +1,143 @@
+<html>
+<head>
+<title>English - Al Bhed Translator with Phonetics</title>
+<script>
+
+  validator = "abcdefghjiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  vowels = "aeiouyAEIOUY";
+
+  aemap = new Array();
+  aemap["a"] = "e";  aemap["b"] = "p";  aemap["c"] = "s";  aemap["d"] = "t";
+  aemap["e"] = "i";  aemap["f"] = "w";  aemap["g"] = "k";  aemap["h"] = "n";
+  aemap["i"] = "u";  aemap["j"] = "v";  aemap["k"] = "g";  aemap["l"] = "c";
+  aemap["m"] = "l";  aemap["n"] = "r";  aemap["o"] = "y";  aemap["p"] = "b";
+  aemap["q"] = "x";  aemap["r"] = "h";  aemap["s"] = "m";  aemap["t"] = "d";
+  aemap["u"] = "o";  aemap["v"] = "f";  aemap["w"] = "z";  aemap["x"] = "q";
+  aemap["y"] = "a";  aemap["z"] = "j";  
+  aemap["A"] = "E";  aemap["B"] = "P";  aemap["C"] = "S";  aemap["D"] = "T";
+  aemap["E"] = "I";  aemap["F"] = "W";  aemap["G"] = "K";  aemap["H"] = "N";
+  aemap["I"] = "U";  aemap["J"] = "V";  aemap["K"] = "G";  aemap["L"] = "C";
+  aemap["M"] = "L";  aemap["N"] = "R";  aemap["O"] = "Y";  aemap["P"] = "B";
+  aemap["Q"] = "X";  aemap["R"] = "H";  aemap["S"] = "M";  aemap["T"] = "D";
+  aemap["U"] = "O";  aemap["V"] = "F";  aemap["W"] = "Z";  aemap["X"] = "Q";
+  aemap["Y"] = "A";  aemap["Z"] = "J";  
+
+  eamap = new Array();
+  eamap["a"] = "y";  eamap["b"] = "p";  eamap["c"] = "l";  eamap["d"] = "t";
+  eamap["e"] = "a";  eamap["f"] = "v";  eamap["g"] = "k";  eamap["h"] = "r";
+  eamap["i"] = "e";  eamap["j"] = "z";  eamap["k"] = "g";  eamap["l"] = "m";
+  eamap["m"] = "s";  eamap["n"] = "h";  eamap["o"] = "u";  eamap["p"] = "b";
+  eamap["q"] = "x";  eamap["r"] = "n";  eamap["s"] = "c";  eamap["t"] = "d";
+  eamap["u"] = "i";  eamap["v"] = "j";  eamap["w"] = "f";  eamap["x"] = "q";
+  eamap["y"] = "o";  eamap["z"] = "w";
+  eamap["A"] = "Y";  eamap["B"] = "P";  eamap["C"] = "L";  eamap["D"] = "T";
+  eamap["E"] = "A";  eamap["F"] = "V";  eamap["G"] = "K";  eamap["H"] = "R";
+  eamap["I"] = "E";  eamap["J"] = "Z";  eamap["K"] = "G";  eamap["L"] = "M";
+  eamap["M"] = "S";  eamap["N"] = "H";  eamap["O"] = "U";  eamap["P"] = "B";
+  eamap["Q"] = "X";  eamap["R"] = "N";  eamap["S"] = "C";  eamap["T"] = "D";
+  eamap["U"] = "I";  eamap["V"] = "J";  eamap["W"] = "F";  eamap["X"] = "Q"; 
+  eamap["Y"] = "O";  eamap["Z"] = "W";
+
+  promap = new Array();
+  promap["a"] = "ah";  promap["b"] = "bae";  promap["c"] = "ku";
+  promap["d"] = "de";  promap["e"] = "eay";  promap["f"] = "fe";
+  promap["g"] = "ge";  promap["h"] = "ha";  promap["i"] = "ee";
+  promap["j"] = "jae";  promap["k"] = "kuk";  promap["l"] = "lu";
+  promap["m"] = "m";  promap["n"] = "n";  promap["o"] = "oh";
+  promap["p"] = "pe";  promap["q"] = "q";  promap["r"] = "ra";
+  promap["s"] = "see";  promap["t"] = "te";  promap["u"] = "oo";
+  promap["v"] = "fu";  promap["w"] = "w";  promap["x"] = "x";
+  promap["y"] = "ae";  promap["z"] = "z";
+  promap["A"] = "AH";  promap["B"] = "BAE";  promap["C"] = "KU";
+  promap["D"] = "DE";  promap["E"] = "EAY";  promap["F"] = "FE";
+  promap["G"] = "GE";  promap["H"] = "HA";  promap["I"] = "EE";
+  promap["J"] = "JAE";  promap["K"] = "KUK";  promap["L"] = "LU";
+  promap["M"] = "M";  promap["N"] = "N";  promap["O"] = "OH";
+  promap["P"] = "PE";  promap["Q"] = "Q";  promap["R"] = "RA";
+  promap["S"] = "SEE";  promap["T"] = "TE";  promap["U"] = "OO";
+  promap["V"] = "FU";  promap["W"] = "W";  promap["X"] = "X";
+  promap["Y"] = "AE";  promap["Z"] = "Z";
+
+function transme() {
+  if (document.theform.picker[0].checked) { // english to al bhed 
+    builder = ""; toggler=0;
+
+    for (var i=0; i < document.theform.stimulus.value.length; i++) {
+      if (document.theform.stimulus.value.charAt(i)=="[") {toggler=1;};
+      if (document.theform.stimulus.value.charAt(i)=="]") {toggler=0;};
+
+      if (toggler==1) {builder=builder+document.theform.stimulus.value.charAt(i);}
+      else {
+        if (validator.indexOf(document.theform.stimulus.value.charAt(i))==-1)
+          {builder=builder+document.theform.stimulus.value.charAt(i);}
+        else
+          {builder=builder+eamap[document.theform.stimulus.value.charAt(i)];};
+      };
+    };
+
+    builder2 = ""; toggler=0; prev=0;
+
+    for (var i=0; i < document.theform.stimulus.value.length; i++) {
+      if (document.theform.stimulus.value.charAt(i)=="[") {toggler=1;};
+      if (document.theform.stimulus.value.charAt(i)=="]") {toggler=0;};
+
+      if (toggler==1) {builder2=builder2+document.theform.stimulus.value.charAt(i);}
+      else {
+        if (validator.indexOf(document.theform.stimulus.value.charAt(i))==-1)
+          {builder2=builder2+document.theform.stimulus.value.charAt(i);
+           prev=0;}
+        else
+          {temp = promap[eamap[document.theform.stimulus.value.charAt(i)]];
+           if (prev==1) {if ((vowels.indexOf(temp.charAt(0))==-1) && (temp.length!=1)) {builder2=builder2+"-";};};
+           builder2=builder2+temp;
+           prev=1;
+          };
+      };      
+    };
+    document.theform.response.value=builder+"\n\nPronounced: \""+builder2+"\"";
+
+  } else { //al bhed to english
+    builder = ""; toggler=0;
+
+    for (var i=0; i < document.theform.stimulus.value.length; i++) {
+      if (document.theform.stimulus.value.charAt(i)=="[") {toggler=1;};
+      if (document.theform.stimulus.value.charAt(i)=="]") {toggler=0;};
+
+      if (toggler==1) {builder=builder+document.theform.stimulus.value.charAt(i);}
+      else {
+        if (validator.indexOf(document.theform.stimulus.value.charAt(i))==-1)
+          {builder=builder+document.theform.stimulus.value.charAt(i);}
+        else
+          {builder=builder+aemap[document.theform.stimulus.value.charAt(i)];};
+      };
+    };
+    document.theform.response.value=builder;
+  };
+  return false;  
+};
+
+</script></head>
+
+<body>
+<p><font size="+2">Al Bhed Translator with Phonetics</font><br><font size="+1">Coded by <a href="mailto:twoflowr@pixelscapes.com">Stefan Gagne</a>, based on <a href="mailto:enigmaopoeia@hotmail.com">enigmaopoeia</a>'s Al Bhed FAQ.</font></p>
+
+<p>Update 9/21/2005: <b>Please mirror this webpage</b> on your own Final Fantasy website rather than just link to it, if possible. Keeps my bandwidth down. Also feel free to rip the code and modify it for your own uses. You've got permission. Just give credit where credit is due for the original.</p>
+
+<p>However, and for the 7,493th time, <b>DO NOT EMAIL ME ASKING HOW TO MIRROR THE PAGE.</b> If you know anything about how JavaScript works you should be able to do this easily -- and if you don't know, then trying to do it will be an exercise in frustration and I do not provide tutorials or free technical support! I also will NOT HELP YOU recode it for your own made-up language. If you wanna monkey with the script, by all means feel free to copy, modify, mutilate, do what you want -- but you're on your own.</p>
+
+<form method="get" name="theform" action="" onSubmit="return transme()">
+
+<p>To Translate: (Encase key nouns, subjects, and other bits not to translate in <b>[ ]</b> brackets.)<br>
+<textarea name="stimulus" cols="60" rows="6" wrap="VIRTUAL"></textarea></p>
+
+<p>Translated:<br>
+<textarea name="response" cols="60" rows="6" wrap="VIRTUAL"></textarea></p>
+
+<p>Translate...<br>
+<input name="picker" type="radio" value="0" checked>English to Al Bhed (with phonetics)<br>
+<input name="picker" type="radio" value="1">Al Bhed to English</p>
+
+<p><input type="submit" value="Dnyhcmyda!"></p>
+</form>
+</body>
+</html>
