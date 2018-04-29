@@ -1,10 +1,17 @@
+<!DOCTYPE html>
 <html>
 <head>
 <title>English - Al Bhed Translator with Phonetics</title>
-<script>
+<script type="text/javascript">
 
   validator = "abcdefghjiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  function isTranslateable(character) {
+    return validator.indexOf(character) !== -1;
+  }
   vowels = "aeiouyAEIOUY";
+  function isVowel(character) {
+    return vowels.indexOf(character) !== -1;
+  }
 
   aemap = new Array();
   aemap["a"] = "e";  aemap["b"] = "p";  aemap["c"] = "s";  aemap["d"] = "t";
@@ -57,6 +64,78 @@
   promap["S"] = "SEE";  promap["T"] = "TE";  promap["U"] = "OO";
   promap["V"] = "FU";  promap["W"] = "W";  promap["X"] = "X";
   promap["Y"] = "AE";  promap["Z"] = "Z";
+
+  const ESCAPESTART = "[";
+  const ESCAPEEND = "]";
+function englishToAlbhed(s) {
+  let parsing = true;
+  let result = "";
+  // Step through the text
+  for (let i = 0; i < s.length; i++) {
+    let c = s.charAt(i);
+    if (c === ESCAPESTART) { parsing = false; }
+    if (c === ESCAPEEND) { parsing = true; }
+    if (!parsing) {
+      result += c;
+    } else {
+      if (isTranslateable(c)) {
+        result += eamap[c];
+      } else {
+        result += c;
+      }
+    }
+  }
+  return result;
+}
+function albhedToEnglish(s) {
+  let parsing = true;
+  let result = "";
+  // Step through the text
+  for (let i = 0; i < s.length; i++) {
+    let c = s.charAt(i);
+    if (c === ESCAPESTART) { parsing = false; }
+    if (c === ESCAPEEND) { parsing = true; }
+    if (!parsing) {
+      result += c;
+    } else {
+      if (isTranslateable(c)) {
+        result += aemap[c];
+      } else {
+        result += c;
+      }
+    }
+  }
+  return result;
+}
+function albhedToPronunciation(s) {
+  let parsing = true;
+  let result = "";
+  let prev = 0;
+  // Step through the text
+  for (let i = 0; i < s.length; i++) {
+    let c = s.charAt(i);
+    if (c === ESCAPESTART) { parsing = false; }
+    if (c === ESCAPEEND) { parsing = true; }
+    if (!parsing) {
+      result += c;
+    } else {
+      if (isTranslateable(c)) {
+        let temp = promap[c];
+        if (prev === 1) {
+          if (!isVowel(temp.charAt(0)) && temp.length !== 1) {
+            result += "-";
+          }
+        }
+        result += temp;
+        prev = 1;
+      } else {
+        result += c;
+        prev = 0;
+      }
+    }
+  }
+  return result;
+}
 
 function transme() {
   if (document.theform.picker[0].checked) { // english to al bhed 
@@ -119,11 +198,7 @@ function transme() {
 </script></head>
 
 <body>
-<p><font size="+2">Al Bhed Translator with Phonetics</font><br><font size="+1">Coded by <a href="mailto:twoflowr@pixelscapes.com">Stefan Gagne</a>, based on <a href="mailto:enigmaopoeia@hotmail.com">enigmaopoeia</a>'s Al Bhed FAQ.</font></p>
-
-<p>Update 9/21/2005: <b>Please mirror this webpage</b> on your own Final Fantasy website rather than just link to it, if possible. Keeps my bandwidth down. Also feel free to rip the code and modify it for your own uses. You've got permission. Just give credit where credit is due for the original.</p>
-
-<p>However, and for the 7,493th time, <b>DO NOT EMAIL ME ASKING HOW TO MIRROR THE PAGE.</b> If you know anything about how JavaScript works you should be able to do this easily -- and if you don't know, then trying to do it will be an exercise in frustration and I do not provide tutorials or free technical support! I also will NOT HELP YOU recode it for your own made-up language. If you wanna monkey with the script, by all means feel free to copy, modify, mutilate, do what you want -- but you're on your own.</p>
+  <p>Adapted from the <a href="http://stefangagne.com/albhed.html">original</a> by Stefan Gagne. As he mentions, he asked to mirror the webpage and states you are free to copy, modify, mutilate, do what you want. I do not know what the name of that license is, but sure!</p>
 
 <form method="get" name="theform" action="" onSubmit="return transme()">
 
