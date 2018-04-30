@@ -1,10 +1,10 @@
-validator = "abcdefghjiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const VALID_CHARS = "abcdefghjiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const VOWELS = "aeiouyAEIOUY";
 function isTranslateable(character) {
-  return validator.indexOf(character) !== -1;
+  return VALID_CHARS.indexOf(character) !== -1;
 }
-vowels = "aeiouyAEIOUY";
 function isVowel(character) {
-  return vowels.indexOf(character) !== -1;
+  return VOWELS.indexOf(character) !== -1;
 }
 
 aemap = new Array();
@@ -59,8 +59,8 @@ promap["S"] = "SEE";  promap["T"] = "TE";  promap["U"] = "OO";
 promap["V"] = "FU";  promap["W"] = "W";  promap["X"] = "X";
 promap["Y"] = "AE";  promap["Z"] = "Z";
 
-const ESCAPESTART = "[";
-const ESCAPEEND = "]";
+const ESCAPESTART = "(";
+const ESCAPEEND = ")";
 function englishToAlbhed(s) {
   let parsing = true;
   let result = "";
@@ -131,61 +131,25 @@ function albhedToPronunciation(s) {
   return result;
 }
 
-function transme() {
-  if (document.theform.picker[0].checked) { // english to al bhed 
-    builder = ""; toggler=0;
+function installListeners() {
+  ["change", "input"].forEach(function(evt) {
+    document.getElementById("english").addEventListener(evt, updateFromEnglish, false);
+    document.getElementById("albhed").addEventListener(evt, updateFromAlbhed, false);
+  });
+}
+function updateFromEnglish() {
+  let english = document.getElementById("english").value;
+  let albhed = englishToAlbhed(english);
+  let pronunciation = albhedToPronunciation(albhed);
+  document.getElementById("albhed").value = albhed;
+  document.getElementById("albhed-pronunciation").value = pronunciation;
+}
+function updateFromAlbhed() {
+  let albhed = document.getElementById("albhed").value;
+  let pronunciation = albhedToPronunciation(albhed);
+  let english = albhedToEnglish(albhed);
+  document.getElementById("english").value = english;
+  document.getElementById("albhed-pronunciation").value = pronunciation;
+}
 
-    for (var i=0; i < document.theform.stimulus.value.length; i++) {
-      if (document.theform.stimulus.value.charAt(i)=="[") {toggler=1;};
-      if (document.theform.stimulus.value.charAt(i)=="]") {toggler=0;};
-
-      if (toggler==1) {builder=builder+document.theform.stimulus.value.charAt(i);}
-      else {
-        if (validator.indexOf(document.theform.stimulus.value.charAt(i))==-1)
-          {builder=builder+document.theform.stimulus.value.charAt(i);}
-        else
-          {builder=builder+eamap[document.theform.stimulus.value.charAt(i)];};
-      };
-    };
-
-    builder2 = ""; toggler=0; prev=0;
-
-    for (var i=0; i < document.theform.stimulus.value.length; i++) {
-      if (document.theform.stimulus.value.charAt(i)=="[") {toggler=1;};
-      if (document.theform.stimulus.value.charAt(i)=="]") {toggler=0;};
-
-      if (toggler==1) {builder2=builder2+document.theform.stimulus.value.charAt(i);}
-      else {
-        if (validator.indexOf(document.theform.stimulus.value.charAt(i))==-1)
-          {builder2=builder2+document.theform.stimulus.value.charAt(i);
-           prev=0;}
-        else
-          {temp = promap[eamap[document.theform.stimulus.value.charAt(i)]];
-           if (prev==1) {if ((vowels.indexOf(temp.charAt(0))==-1) && (temp.length!=1)) {builder2=builder2+"-";};};
-           builder2=builder2+temp;
-           prev=1;
-          };
-      };      
-    };
-    document.theform.response.value=builder+"\n\nPronounced: \""+builder2+"\"";
-
-  } else { //al bhed to english
-    builder = ""; toggler=0;
-
-    for (var i=0; i < document.theform.stimulus.value.length; i++) {
-      if (document.theform.stimulus.value.charAt(i)=="[") {toggler=1;};
-      if (document.theform.stimulus.value.charAt(i)=="]") {toggler=0;};
-
-      if (toggler==1) {builder=builder+document.theform.stimulus.value.charAt(i);}
-      else {
-        if (validator.indexOf(document.theform.stimulus.value.charAt(i))==-1)
-          {builder=builder+document.theform.stimulus.value.charAt(i);}
-        else
-          {builder=builder+aemap[document.theform.stimulus.value.charAt(i)];};
-      };
-    };
-    document.theform.response.value=builder;
-  };
-  return false;  
-};
-
+document.addEventListener('DOMContentLoaded', installListeners, false);

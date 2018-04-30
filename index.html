@@ -1,31 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>English - Al Bhed Translator with Phonetics</title>
   <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
-  <p>Adapted from the <a href="http://stefangagne.com/albhed.html">original</a> by Stefan Gagne. As he mentions, he asked to mirror the webpage and states you are free to copy, modify, mutilate, do what you want. I do not know what the name of that license is, but sure!</p>
+  <p>Adapted from the <a href="http://stefangagne.com/albhed.html">original</a> by Stefan Gagne. He asks to mirror the webpage and states you are free to copy, modify, mutilate, do what you want. I do not know what the name of that license is, but sure!</p>
 
-  <textarea id="english"></textarea>
-  <textarea id="albhed"></textarea>
-  <p id="albhed-pronunciation">Pronunciation</p>
+  <p>Encase key nouns, subjects, and other bits not to translate in <strong>( )</strong> parentheses.<br>
 
-  <hr />
+  <fieldset>
+    <label for="english">English</label>
+    <textarea id="english" cols="60" rows="6" placeholder="English"></textarea>
+  </fieldset>
+  <fieldset>
+    <label for="albhed">Al Bhed</label>
+    <textarea id="albhed" cols="60" rows="6" placeholder="Al Bhed"></textarea>
+  </fieldset>
+  <fieldset>
+    <label for="albhed-pronunciation">Al Bhed Pronunciation (read-only)</label>
+    <textarea id="albhed-pronunciation" cols="60" rows="6" placeholder="Pronunciation" readonly="readonly"></textarea>
+  </fieldset>
 
-<form method="get" name="theform" action="" onSubmit="return transme()">
-
-<p>To Translate: (Encase key nouns, subjects, and other bits not to translate in <b>[ ]</b> brackets.)<br>
-<textarea name="stimulus" cols="60" rows="6" wrap="VIRTUAL"></textarea></p>
-
-<p>Translated:<br>
-<textarea name="response" cols="60" rows="6" wrap="VIRTUAL"></textarea></p>
-
-<p>Translate...<br>
-<input name="picker" type="radio" value="0" checked>English to Al Bhed (with phonetics)<br>
-<input name="picker" type="radio" value="1">Al Bhed to English</p>
-
-<p><input type="submit" value="Dnyhcmyda!"></p>
-</form>
 </body>
 </html>
